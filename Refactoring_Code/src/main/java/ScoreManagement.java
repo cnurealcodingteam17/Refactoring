@@ -51,8 +51,7 @@ public class ScoreManagement {
     public static void input_studentNum_Score() {
         /*smell code 1 -Extract Method*/
         total_student=0;
-        int score = 0;
-        int numberOfStudent=0;
+
 
 
         System.out.print(">학생 수를 입력하세요.: ");
@@ -62,6 +61,13 @@ public class ScoreManagement {
             System.out.print(">올바른 입력이 아닙니다. 다시 학생 수를 입력하세요.: ");
             total_student = myScanner.nextInt();
         }
+
+        studentInfo();
+    }
+
+    public static void studentInfo(){
+        int score = 0;
+        int numberOfStudent=0;
 
         scores = new int[total_student];
         studentnames = new String[total_student];
@@ -91,16 +97,12 @@ public class ScoreManagement {
             System.out.println("Error: 성적을 입력하지 않았습니다.\n\n");
             return ;
         }
-
         /*smell code 3 - Inline Temp*/
-        double average = calcAverage(scores, total_student) ;
-        int Max = calcMax(scores, total_student);
-        int Min = calcMin(scores, total_student);
 
         System.out.println("\n모두" + total_student + "명의 성적이 입력되었습니다.");
-        System.out.println("평균은" + average + "입니다.\n\n");
-        System.out.println("최고점은 " + Max + " 점 입니다.");
-        System.out.println("최저점은 " + Min + " 점 입니다.\n");
+        System.out.println("평균은" + calcAverage(scores, total_student)  + "입니다.\n\n");
+        System.out.println("최고점은 " + calcMax(scores, total_student) + " 점 입니다.");
+        System.out.println("최저점은 " + calcMin(scores, total_student) + " 점 입니다.\n");
 
 
         System.out.println("성적순은 다음과 같습니다.");
@@ -125,16 +127,24 @@ public class ScoreManagement {
             return ;
         }
 
-        /*smell code 1 - Extract Method , 
-        smell code 2 -Extract Variable*/
-        if (scores[num] > calcAverage(scores, total_student)) {
+        /*smell code 1 - Extract Method ,
+        smell code 2 - Extract Variable*/
+
+        printScore(num);
+
+    }
+
+    public static void printScore(int num){
+        final boolean highScore = scores[num] >= calcAverage(scores, total_student);
+        final boolean lowScore = scores[num] < calcAverage(scores, total_student);
+        final boolean equalScore = scores[num] == calcAverage(scores, total_student) ;
+        if (highScore) {
             System.out.println(studentnames[num]+" 학생의 성적은 " + scores[num] + "점으로 평균 이상입니다.");
-        } else if (scores[num] < calcAverage(scores, total_student)) {
+        } else if (lowScore) {
             System.out.println(studentnames[num]+" 학생의 성적은 " + scores[num] + "점으로 평균 미만입니다.");
-        } else {
+        } else if (equalScore) {
             System.out.println(studentnames[num]+" 학생의 성적은 " + scores[num] + "점으로 평균 입니다.");
         }
-
     }
 
 
@@ -151,19 +161,18 @@ public class ScoreManagement {
     private static double calcAverage(int[] elements, int aSize) {
         int i = 0;
         int sum = 0;
-        double average;
 
         while (i < aSize) {
             sum = sum + elements[i++];
         }
 
         /*smell code 3 - Inline temp*/
-        average = (double) sum / aSize;
 
-        return average;
+        return (double) sum / aSize;
 
 
     }
+
 
     private static int calcMax(int[] elements, int aSize) {
         int j = 0;
@@ -193,22 +202,22 @@ public class ScoreManagement {
 
     }
 
+
     private static void selectionSort(String[] students, int[] elements, int aSize) {
         /*smell code 3 - Inline Temp*/
-        int lastLoc = aSize - 1;
 
         int maxLoc;
         int maxValue;
         int curLoc;
         String name;
 
-        for (int selectionLoc=0 ;selectionLoc < lastLoc ; selectionLoc++) {
+        for (int selectionLoc=0 ;selectionLoc < aSize - 1 ; selectionLoc++) {
 
             maxLoc = selectionLoc;
             maxValue = elements[maxLoc];
             curLoc = selectionLoc + 1;
 
-            while (curLoc <= lastLoc) {
+            while (curLoc <= aSize - 1) {
                 if (elements[curLoc] >= maxValue) {
                     maxLoc = curLoc;
                     maxValue = elements[maxLoc];
